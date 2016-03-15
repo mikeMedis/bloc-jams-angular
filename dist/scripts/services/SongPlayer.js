@@ -1,7 +1,10 @@
 (function() {
 	function SongPlayer() {
 		var SongPlayer = {};
-
+		/**
+		* @desc current song
+		* @type {Object}
+		*/
 		var currentSong = null;
 
 		/**
@@ -29,14 +32,31 @@
 			currentSong = song;
 		};
 
-		SongPlayer.play = function(song) {
-			if (currentSong !== song) {
-				setSong(song);
+		/**
+		* @function playSong
+		* @desc Plays passed in song object
+		* @param {Object} song
+		*/
+		function playSong(song){
+			if (currentBuzzObject){
 				currentBuzzObject.play();
 				song.playing = true;
+			}
+		}
+
+		/**
+		* @function SongPlayer.play
+		* @desc Method to start playing song
+		* @param {Object} song
+		*/
+		SongPlayer.play = function(song) {
+			song = song || SongPlayer.currentSong;
+			if (currentSong !== song) {
+				setSong(song);
+				playSong(song);
 			} else if (currentSong === song) {
 				if (currentBuzzObject.isPaused()) {
-					currentBuzzObject.play();
+					playsong(song);
 				}
 			}
 		};
@@ -45,6 +65,13 @@
 			currentBuzzObject.pause();
 			song.playing = false;
 		};
+
+		/**
+		* @function playSong
+		* @desc plays the current currentBuzzObject()
+		* @param {Object} song
+		*/
+
 
 		return SongPlayer;
 	}
