@@ -1,5 +1,3 @@
-angular.module('blocJams', ['ui.router']);
-
 (function() {
 	function config($stateProvider, $locationProvider) {
 		$locationProvider
@@ -16,6 +14,7 @@ angular.module('blocJams', ['ui.router']);
 		})
 		.state('album', {
 			url: '/album',
+			controller: 'AlbumCtrl as album',
 			templateUrl: '/templates/album.html'
 		})
 		.state('collection', {
@@ -23,11 +22,8 @@ angular.module('blocJams', ['ui.router']);
 			controller: 'CollectionCtrl as collection',
 			templateUrl: '/templates/collection.html'
 		});
+	};
 
-
-	}
-
-	angular.module('blocJams', ['ui.router']);
 	angular
 	.module('blocJams', ['ui.router'])
 	.config(config);
