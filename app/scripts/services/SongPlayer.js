@@ -1,12 +1,12 @@
 (function() {
-	function SongPlayer() {
+	function SongPlayer(Fixtures) {
 		var SongPlayer = {};
+
 		/**
-		* @desc current song
+		* @desc Buzz object for current album
 		* @type {Object}
 		*/
-		var currentSong = null;
-
+		var currentAlbum = Fixtures.getAlbum();
 		/**
 		* @desc Buzz object audio file
 		* @type {Object}
@@ -21,7 +21,7 @@
 		var setSong = function(song) {
 			if (currentBuzzObject) {
 				currentBuzzObject.stop();
-				currentSong.playing = null;
+				SongPlayer.playing = null;
 			}
 
 			currentBuzzObject = new buzz.sound(song.audioUrl, {
@@ -29,7 +29,7 @@
 				preload: true
 			});
 
-			currentSong = song;
+			SongPlayer.currentSong = song;
 		};
 
 		/**
@@ -37,12 +37,11 @@
 		* @desc Plays passed in song object
 		* @param {Object} song
 		*/
-		function playSong(song){
-			if (currentBuzzObject){
-				currentBuzzObject.play();
-				song.playing = true;
-			}
-		}
+		function playSong(song) {
+			currentBuzzObject.play();
+			song.playing = true;
+		};
+
 
 		/**
 		* @function SongPlayer.play
@@ -51,10 +50,15 @@
 		*/
 		SongPlayer.play = function(song) {
 			song = song || SongPlayer.currentSong;
-			if (currentSong !== song) {
+			if (!song) {
+				song = currentAlbum.songs[0];
+				setSong(song);
+			}
+
+			if (SongPlayer.currentSong !== song) {
 				setSong(song);
 				playSong(song);
-			} else if (currentSong === song) {
+			} else if (SongPlayer.currentSong === song) {
 				if (currentBuzzObject.isPaused()) {
 					playsong(song);
 				}
@@ -62,6 +66,7 @@
 		};
 
 		SongPlayer.pause = function(song) {
+			song = song || SongPlayer.currentSong;
 			currentBuzzObject.pause();
 			song.playing = false;
 		};
